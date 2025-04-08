@@ -1,19 +1,22 @@
-services:
-  windows:11
-    image: dockurr/windows
-    container_name: windows
-    environment:
-      VERSION: "11"
-    devices:
-      - /dev/kvm
-      - /dev/net/tun
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 8006:8006
-      - 3389:3389/tcp
-      - 3389:3389/udp
-    volumes:
-      - ./windows:/storage
-    restart: always
-    stop_grace_period: 2m
+name: TOOLBOXLAP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Start Building...
+    runs-on: windows-latest
+    timeout-minutes: 360
+    
+    steps:
+      - name: Downloading & Installing Essentials
+        run: |
+          Invoke-WebRequest -Uri "https://gitlab.com/raposabrty/pcrdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
+          cmd /c Downloads.bat
+
+      - name: Show Website
+        run: cmd /c show.bat
+
+      - name: Time Counter
+        run: cmd /c loop.bat
